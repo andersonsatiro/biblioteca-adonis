@@ -1,38 +1,25 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsuariosController {
-  /**
-   * Display a list of resource
-   */
-  async index({}: HttpContext) {}
+  async index({ response }: HttpContext) {
+    return response.ok({ message: 'Listar usuários' })
+  }
 
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
+  async store({ request, response }: HttpContext) {
+    const dados = request.all()
+    return response.created({ message: 'Usuário cadastrado', dados })
+  }
 
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {}
+  async show({ params, response }: HttpContext) {
+    return response.ok({ message: 'Detalhar usuário', id: params.id })
+  }
 
-  /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) {}
+  async update({ params, request, response }: HttpContext) {
+    const dados = request.all()
+    return response.ok({ message: 'Usuário atualizado', id: params.id, dados })
+  }
 
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
-
-  /**
-   * Handle form submission for the edit action
-   */
-  async update({ params, request }: HttpContext) {}
-
-  /**
-   * Delete record
-   */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, response }: HttpContext) {
+    return response.ok({ message: 'Usuário removido', id: params.id })
+  }
 }

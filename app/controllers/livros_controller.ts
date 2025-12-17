@@ -1,48 +1,30 @@
-import { createLivroValidator } from '#validators/livro'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LivrosController {
-  /**
-   * Display a list of resource
-   */
-  async index({}: HttpContext) {
-     return [
-      {id:1,titulo:"Pinochio",autor:'Disney',preco:"50"}
-    ]
+  async index({ response }: HttpContext) {
+    return response.ok({ message: 'Listar livros' })
   }
 
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
-
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {
-    const payload = await request.validateUsing(createLivroValidator)
-    return payload
+  async store({ request, response }: HttpContext) {
+    const dados = request.all()
+    return response.created({ message: 'Livro cadastrado', dados })
   }
 
-  /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) {
-    let codigo=params.id
+  async show({ params, response }: HttpContext) {
+    return response.ok({ message: 'Detalhar livro', id: params.id })
   }
 
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
+  async update({ params, request, response }: HttpContext) {
+    const dados = request.all()
+    return response.ok({ message: 'Livro atualizado', id: params.id, dados })
+  }
 
-  /**
-   * Handle form submission for the edit action
-   */
-  async update({ params, request }: HttpContext) {}
+  async destroy({ params, response }: HttpContext) {
+    return response.ok({ message: 'Livro removido', id: params.id })
+  }
 
-  /**
-   * Delete record
-   */
-  async destroy({ params }: HttpContext) {}
+  async buscar({ request, response }: HttpContext) {
+    const filtros = request.qs()
+    return response.ok({ message: 'Buscar livros', filtros })
+  }
 }
