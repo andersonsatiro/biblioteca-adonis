@@ -1,30 +1,37 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import LivroService from '#services/livro_service'
+import {
+  criarLivroValidator,
+  atualizarLivroValidator,
+} from '#validators/livro_validator'
 
 export default class LivrosController {
-  async index({ response }: HttpContext) {
-    return response.ok({ message: 'Listar livros' })
+  private service = new LivroService()
+
+  async index() {
+    return this.service.listar()
   }
 
-  async store({ request, response }: HttpContext) {
-    const dados = request.all()
-    return response.created({ message: 'Livro cadastrado', dados })
+  async store({ request }: HttpContext) {
+    const payload = await request.validateUsing(criarLivroValidator)
+    return this.service.criar(payload)
   }
 
-  async show({ params, response }: HttpContext) {
-    return response.ok({ message: 'Detalhar livro', id: params.id })
+  async show({ params }: HttpContext) {
+    return this.service.buscarPorId(params.id)
   }
 
-  async update({ params, request, response }: HttpContext) {
-    const dados = request.all()
-    return response.ok({ message: 'Livro atualizado', id: params.id, dados })
+  async update({ params, request }: HttpContext) {
+    const payload = await request.validateUsing(atualizarLivroValidator)
+    return this.service.atualizar(params.id, payload)
   }
 
-  async destroy({ params, response }: HttpContext) {
-    return response.ok({ message: 'Livro removido', id: params.id })
+  async destroy({ params }: HttpContext) {
+    await this.service.remover(params.id)
+    return { message: 'Livro removido com sucesso' }
   }
 
-  async buscar({ request, response }: HttpContext) {
-    const filtros = request.qs()
-    return response.ok({ message: 'Buscar livros', filtros })
+  async buscar({ request }: HttpContext) {
+    return this.service.buscar(request.qs())
   }
 }

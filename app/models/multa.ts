@@ -28,6 +28,12 @@ export default class Multa extends compose(BaseModel, AuthFinder) {
     @column()
     declare paga: boolean
 
+    @column({ columnName: "data_pagamento" })
+    declare dataPagamento: Date | null
+
+    @column({ columnName: "emprestimo_id" })
+    declare emprestimoId: number
+
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime
 

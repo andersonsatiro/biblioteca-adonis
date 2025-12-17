@@ -40,3 +40,8 @@ Ao registrar devolução, o sistema deve calcular automaticamente multas por atr
 ## Tecnologias e Padrões
 
 O projeto utilizará AdonisJS 6 com Lucid ORM.
+
+  async store({ request }: HttpContext) {
+    const payload = await request.validateUsing(createLivroValidator)
+    return payload
+  }

@@ -37,11 +37,11 @@ export default class Livro extends compose(BaseModel, AuthFinder) {
     @column({ columnName: 'local_prateleira' })
     declare localPrateleira: string | null
 
-    @column({ columnName: 'total_copias' })
-    declare totalCopias: number
+    @column({ columnName: 'total_exemplares' })
+    declare totalExemplares: number
 
-    @column({ columnName: 'copias_disponiveis' })
-    declare copiasDisponiveis: number
+    @column({ columnName: 'exemplares_disponiveis' })
+    declare exemplaresDisponiveis: number
 
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime

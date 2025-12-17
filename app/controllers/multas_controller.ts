@@ -1,11 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import MultaService from '#services/multa_service'
+
 
 export default class MultasController {
-  async index({ response }: HttpContext) {
-    return response.ok({ message: 'Listar multas' })
+  private service = new MultaService()
+
+  async index() {
+    return this.service.listar()
   }
 
-  async pagar({ params, response }: HttpContext) {
-    return response.ok({ message: 'Multa paga', id: params.id })
+  async pagar({ params }: HttpContext) {
+    return this.service.pagar(params.id)
   }
 }

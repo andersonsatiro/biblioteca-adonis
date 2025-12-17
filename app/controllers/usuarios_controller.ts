@@ -1,25 +1,33 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import UsuarioService from '#services/usuario_service'
+import {
+  criarUsuarioValidator,
+  atualizarUsuarioValidator,
+} from '#validators/usuario_validator'
 
 export default class UsuariosController {
-  async index({ response }: HttpContext) {
-    return response.ok({ message: 'Listar usuários' })
+  private service = new UsuarioService()
+
+  async index() {
+    return this.service.listar()
   }
 
-  async store({ request, response }: HttpContext) {
-    const dados = request.all()
-    return response.created({ message: 'Usuário cadastrado', dados })
+  async store({ request }: HttpContext) {
+    const payload = await request.validateUsing(criarUsuarioValidator)
+    return this.service.criar(payload)
   }
 
-  async show({ params, response }: HttpContext) {
-    return response.ok({ message: 'Detalhar usuário', id: params.id })
+  async show({ params }: HttpContext) {
+    return this.service.buscarPorId(params.id)
   }
 
-  async update({ params, request, response }: HttpContext) {
-    const dados = request.all()
-    return response.ok({ message: 'Usuário atualizado', id: params.id, dados })
+  async update({ params, request }: HttpContext) {
+    const payload = await request.validateUsing(atualizarUsuarioValidator)
+    return this.service.atualizar(params.id, payload)
   }
 
-  async destroy({ params, response }: HttpContext) {
-    return response.ok({ message: 'Usuário removido', id: params.id })
+  async destroy({ params }: HttpContext) {
+    await this.service.remover(params.id)
+    return { message: 'Usuário removido com sucesso' }
   }
 }
